@@ -25,10 +25,17 @@ export class Register extends Component {
       email: "",
       password: "",
       password2: "",
-      username: ""
+      username: "",
+      errors: {}
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors })
+    }
   }
 
   onChange(event) {
@@ -48,7 +55,6 @@ export class Register extends Component {
     };
 
     this.props.registerUser(userData, this.props.history)
-    alert("You've registered successfully!")
     this.setState({
       email: "",
       password: "",
@@ -59,7 +65,7 @@ export class Register extends Component {
 
   render() {
     const { classes } = this.props;
-
+    const { errors } = this.state;
     return (
       <Paper style={{ padding: 10, maxWidth: '450px' }}>
         <form onSubmit={this.onSubmit}>
@@ -70,6 +76,7 @@ export class Register extends Component {
             label="Email"
             type="email"
             className={classes.textField}
+            helperText={errors.email ? errors.email : ''}
           />
           <TextField
             name="username" 
@@ -78,6 +85,7 @@ export class Register extends Component {
             label="User name"
             type="text"
             className={classes.textField}
+            helperText={errors.username ? errors.username : ''}
           />
           <TextField 
             name="password"
@@ -86,6 +94,7 @@ export class Register extends Component {
             label="Password"
             type="password"
             className={classes.textField}
+            helperText={errors.password ? errors.password : ''}
           />
           <TextField 
             name="password2"
@@ -94,6 +103,7 @@ export class Register extends Component {
             label="Repeat password"
             type="password"
             className={classes.textField}
+            helperText={errors.password2 ? errors.password2 : ''}
           />
           <div className={classes.btnBlock}>
             <Button 
