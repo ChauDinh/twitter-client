@@ -77,6 +77,7 @@ export class Register extends Component {
             type="email"
             className={classes.textField}
             helperText={errors.email ? errors.email : ''}
+            error={errors.email ? true : false}
           />
           <TextField
             name="username" 
@@ -86,6 +87,7 @@ export class Register extends Component {
             type="text"
             className={classes.textField}
             helperText={errors.username ? errors.username : ''}
+            error={errors.username ? true : false}
           />
           <TextField 
             name="password"
@@ -95,6 +97,7 @@ export class Register extends Component {
             type="password"
             className={classes.textField}
             helperText={errors.password ? errors.password : ''}
+            error={errors.password ? true : false}
           />
           <TextField 
             name="password2"
@@ -104,6 +107,7 @@ export class Register extends Component {
             type="password"
             className={classes.textField}
             helperText={errors.password2 ? errors.password2 : ''}
+            error={errors.password2 ? true : false}
           />
           <div className={classes.btnBlock}>
             <Button 
