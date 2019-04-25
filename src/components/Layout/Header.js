@@ -1,226 +1,151 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import InputBase from '@material-ui/core/InputBase';
-import Badge from '@material-ui/core/Badge';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
-import { fade } from '@material-ui/core/styles/colorManipulator';
-import { withStyles } from '@material-ui/core/styles';
-import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import MailIcon from '@material-ui/icons/Mail';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import MoreIcon from '@material-ui/icons/MoreVert';
+import React, { Component } from "react";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import IconButton from "@material-ui/core/IconButton";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import AccountCircle from "@material-ui/icons/AccountCircle";
+import MoreVert from "@material-ui/icons/MoreVert";
+import { Link } from "react-router-dom";
+import { withStyles } from "@material-ui/core/styles";
+import { connect } from "react-redux";
 
-const styles = theme => ({
+import { logoutUser } from "../../actions/authActions";
+
+const styles = {
   root: {
-    width: '100%',
+    flexGrow: 1
   },
-  grow: {
-    flexGrow: 1,
+  logo: {
+    color: "#67757f",
+    fontSize: "20px",
+    fontWeight: "bold",
+    textTransform: "capitalize",
   },
-  menuButton: {
-    marginLeft: -12,
-    marginRight: 20,
+  account: {
+    backgroundColor: "#67757f",
+    borderRadius: "50%"
   },
-  title: {
-    display: 'none',
-    [theme.breakpoints.up('sm')]: {
-      display: 'block',
-    },
+  guest: {
+    color: "#67757f",
+    border: 'none'
   },
-  search: {
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
-    '&:hover': {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
-    },
-    marginRight: theme.spacing.unit * 2,
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing.unit * 3,
-      width: 'auto',
-    },
-  },
-  searchIcon: {
-    width: theme.spacing.unit * 9,
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  inputRoot: {
-    color: 'inherit',
-    width: '100%',
-  },
-  inputInput: {
-    paddingTop: theme.spacing.unit,
-    paddingRight: theme.spacing.unit,
-    paddingBottom: theme.spacing.unit,
-    paddingLeft: theme.spacing.unit * 10,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: 200,
-    },
-  },
-  sectionDesktop: {
-    display: 'none',
-    [theme.breakpoints.up('md')]: {
-      display: 'flex',
-    },
-  },
-  sectionMobile: {
-    display: 'flex',
-    [theme.breakpoints.up('md')]: {
-      display: 'none',
-    },
-  },
-});
+  space: {
+    justifyContent: 'space-between'
+  }
+};
 
-class PrimarySearchAppBar extends React.Component {
-  state = {
-    anchorEl: null,
-    mobileMoreAnchorEl: null,
-  };
+class Header extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      anchorEl: null
+    };
+    this.handleLogout = this.handleLogout.bind(this);
+  }
 
-  handleProfileMenuOpen = event => {
-    this.setState({ anchorEl: event.currentTarget });
-  };
+  handleMenu = event => {
+    this.setState({
+      anchorEl: event.currentTarget
+    })
+  }
 
-  handleMenuClose = () => {
+  handleClose = () => {
+    this.setState({
+      anchorEl: null
+    })
+  }
+
+  handleLogout() {
     this.setState({ anchorEl: null });
-    this.handleMobileMenuClose();
-  };
-
-  handleMobileMenuOpen = event => {
-    this.setState({ mobileMoreAnchorEl: event.currentTarget });
-  };
-
-  handleMobileMenuClose = () => {
-    this.setState({ mobileMoreAnchorEl: null });
-  };
+    this.props.logoutUser();
+  }
 
   render() {
-    const { anchorEl, mobileMoreAnchorEl } = this.state;
-    const { classes } = this.props;
-    const isMenuOpen = Boolean(anchorEl);
-    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+    const { classes, isAuthenticated } = this.props;
+    const { anchorEl } = this.state;
+    const open = Boolean(anchorEl);
 
-    const renderMenu = (
-      <Menu
-        anchorEl={anchorEl}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        open={isMenuOpen}
-        onClose={this.handleMenuClose}
-      >
-        <MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
-        <MenuItem onClick={this.handleMenuClose}>My account</MenuItem>
-      </Menu>
-    );
+    const guestLinks = (
+      <div>
+        <IconButton
+          aria-owns={ open ? 'menu-appbar' : undefined }
+          aria-haspopup="true"
+          color="inherit"
+          onClick={this.handleMenu}
+        >
+          <MoreVert className={classes.guest}/>
+        </IconButton>
+        <Menu
+          id="menu-appbar"
+          open={open}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right'
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right'
+          }}
+          anchorEl={anchorEl}
+          onClose={this.handleClose}
+        >
+          <MenuItem onClick={this.handleClose}>
+            <Link to="/register">Register</Link>
+          </MenuItem>
+          <MenuItem onClick={this.handleClose}>
+            <Link to="/login">Login</Link>
+          </MenuItem>
+        </Menu>
+      </div>
+    )
 
-    const renderMobileMenu = (
-      <Menu
-        anchorEl={mobileMoreAnchorEl}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        open={isMobileMenuOpen}
-        onClose={this.handleMenuClose}
-      >
-        <MenuItem onClick={this.handleMobileMenuClose}>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <MailIcon />
-            </Badge>
-          </IconButton>
-          <p>Messages</p>
-        </MenuItem>
-        <MenuItem onClick={this.handleMobileMenuClose}>
-          <IconButton color="inherit">
-            <Badge badgeContent={11} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-          <p>Notifications</p>
-        </MenuItem>
-        <MenuItem onClick={this.handleProfileMenuOpen}>
-          <IconButton color="inherit">
-            <AccountCircle />
-          </IconButton>
-          <p>Profile</p>
-        </MenuItem>
-      </Menu>
-    );
-
+    const authLinks = (
+      <div>
+        <IconButton 
+          aria-owns={ open ? 'menu-appbar' : undefined }
+          aria-haspopup="true"
+          color="inherit"
+          onClick={this.handleMenu}
+        >
+          <AccountCircle className={classes.account} />
+        </IconButton>
+        <Menu
+          id="menu-appbar"
+          open={open}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right'
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right'
+          }}
+          anchorEl={anchorEl}
+          onClose={this.handleClose}
+        >
+          <MenuItem onClick={this.handleClose}>Profile</MenuItem>
+          <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
+        </Menu>
+      </div>
+    )
     return (
       <div className={classes.root}>
-        <AppBar position="static">
-          <Toolbar>
-            <IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">
-              <MenuIcon />
-            </IconButton>
-            <Typography className={classes.title} variant="h6" color="inherit" noWrap>
-              TwitMew
-            </Typography>
-            <div className={classes.search}>
-              <div className={classes.searchIcon}>
-                <SearchIcon />
-              </div>
-              <InputBase
-                placeholder="Search…"
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput,
-                }}
-              />
-            </div>
-            <div className={classes.grow} />
-            <div className={classes.sectionDesktop}>
-              <IconButton color="inherit">
-                <Badge badgeContent={4} color="secondary">
-                  <MailIcon />
-                </Badge>
-              </IconButton>
-              <IconButton color="inherit">
-                <Badge badgeContent={17} color="secondary">
-                  <NotificationsIcon />
-                </Badge>
-              </IconButton>
-              <IconButton
-                aria-owns={isMenuOpen ? 'material-appbar' : undefined}
-                aria-haspopup="true"
-                onClick={this.handleProfileMenuOpen}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-            </div>
-            <div className={classes.sectionMobile}>
-              <IconButton aria-haspopup="true" onClick={this.handleMobileMenuOpen} color="inherit">
-                <MoreIcon />
-              </IconButton>
-            </div>
+        <AppBar position="static" style={{ backgroundColor: "#f8f8f8" }}>
+          <Toolbar className={classes.space}>
+            <Link to="/" className={classes.logo}>
+              TwitBook
+            </Link>
+            { isAuthenticated ? authLinks : guestLinks }
           </Toolbar>
         </AppBar>
-        {renderMenu}
-        {renderMobileMenu}
       </div>
-    );
+    )
   }
 }
 
-PrimarySearchAppBar.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+})
 
-export default withStyles(styles)(PrimarySearchAppBar);
+export default connect(mapStateToProps, { logoutUser })(withStyles(styles)(Header));

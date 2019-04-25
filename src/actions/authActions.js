@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { GET_ERRORS, SET_CURRENT_USER } from "../constants/index";
+import { GET_ERRORS, SET_CURRENT_USER } from "../constants";
 import setAuthHeader from "../utils/setAuthHeader";
 
 export const loginUser = userData => dispatch => {
@@ -31,11 +31,11 @@ export const getCurrentUser = () => dispatch => {
     .then(res => dispatch(setCurrentUser(res.data)));
 };
 
-export const setCurrentUser = data => {
-  return {
-    type: SET_CURRENT_USER,
-    payload: data
-  };
+export const setCurrentUser = (data) => {
+  return { 
+      type: SET_CURRENT_USER,
+      payload: data
+    }
 };
 
 export const logoutUser = () => dispatch => {

@@ -13,7 +13,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         isAuthenticated: Object.keys(action.payload).length !== 0,
-        user: action
+        user: action.payload
       }
     default:
       return state
