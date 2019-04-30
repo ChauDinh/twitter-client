@@ -36,6 +36,14 @@ const styles = {
     color: "#888",
     marginBottom: 10
   },
+  btnBlock: {
+    textAlign: 'right',
+    width: '100%'
+  },
+  btnFollow: {
+    backgroundColor: '#0b8dc9',
+    color: 'white'
+  }
 };
 
 class Profile extends Component {
@@ -58,6 +66,20 @@ class Profile extends Component {
             user, 
             profile 
           } = this.props;
+    let followBtns;
+    if (auth.isAuthenticated) {
+      followBtns = (<div className={classes.btnBlock}>
+        <Button variant="outlined" className={classes.btnFollow}>
+          Follow
+        </Button>
+      </div>)
+    } else {
+      followBtns = (<div>
+        <Button variant="outlined" className={classes.btnUnFollow}>
+          Unfollow
+        </Button>
+      </div>)
+    }
     let items;
     items = list && list.map(e => <Post key={e._id} post={e} />);
 
@@ -80,9 +102,7 @@ class Profile extends Component {
               {profile.following.length}
               <span className={classes.detailTitle}>following</span>
             </div>
-            <div>
-              <Button variant="outlined" color="primary">Follow</Button>
-            </div>
+            { followBtns }
           </div>
         </Paper>
       )
