@@ -18,6 +18,15 @@ export const getUserProfile = userId => dispatch => {
     .catch(err => console.error(err));
 };
 
+export const refreshUserProfile = userId => dispatch => {
+  axios.get(`http://localhost:8080/api/users/${userId}`)
+    .then(res => dispatch({
+      type: GET_PROFILE,
+      payload: res.data
+    }))
+    .catch(err => console.error(err));
+};
+
 export const getPostsByUserId = userId => dispatch => {
   dispatch(loadPosts());
   axios.get(`http://localhost:8080/api/posts/${userId}`)
@@ -32,7 +41,7 @@ export const followUser = userId => dispatch => {
   axios.post(`http://localhost:8080/api/users/follow`, { userId })
     .then(res => dispatch({
       type: FOLLOW,
-      payload: res.data
+      payload: res.data.userId
     }))
     .catch(err => console.error(err));
 };
@@ -41,7 +50,7 @@ export const unfollowUser = userId => dispatch => {
   axios.post(`http://localhost:8080/api/users/unfollow`, { userId })
     .then(res => dispatch({
       type: UNFOLLOW,
-      payload: res.data
+      payload: res.data.userId
     }))
     .catch(err => console.error(err));
 };
