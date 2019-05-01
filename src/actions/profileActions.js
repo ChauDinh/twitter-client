@@ -3,7 +3,9 @@ import {
   LOAD_PROFILE,
   GET_PROFILE,
   GET_POSTS,
-  LOADING_POSTS
+  LOADING_POSTS,
+  FOLLOW,
+  UNFOLLOW
 } from "../constants";
 
 export const getUserProfile = userId => dispatch => {
@@ -25,6 +27,24 @@ export const getPostsByUserId = userId => dispatch => {
     }))
     .catch(err => console.error(err));
 }
+
+export const followUser = userId => dispatch => {
+  axios.post(`http://localhost:8080/api/users/follow`, { userId })
+    .then(res => dispatch({
+      type: FOLLOW,
+      payload: res.data
+    }))
+    .catch(err => console.error(err));
+};
+
+export const unfollowUser = userId => dispatch => {
+  axios.post(`http://localhost:8080/api/users/unfollow`, { userId })
+    .then(res => dispatch({
+      type: UNFOLLOW,
+      payload: res.data
+    }))
+    .catch(err => console.error(err));
+};
 
 export const loadProfile = () => {
   return {

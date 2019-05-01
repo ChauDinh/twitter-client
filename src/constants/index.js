@@ -11,3 +11,7 @@ export const ADD_POST = 'ADD_POST';
 export const LOAD_PROFILE = 'LOAD_PROFILE';
 
 export const GET_PROFILE = 'GET_PROFILE';
+
+export const FOLLOW = 'FOLLOW';
+
+export const UNFOLLOW = 'UNFOLLOW';

@@ -6,7 +6,9 @@ import Button from "@material-ui/core/Button";
 
 import {
   getPostsByUserId,
-  getUserProfile
+  getUserProfile,
+  followUser,
+  unfollowUser
 } from "../../actions/profileActions";
 
 import Post from "../Posts/Post";
@@ -42,7 +44,12 @@ const styles = {
   },
   btnFollow: {
     backgroundColor: '#0b8dc9',
-    color: 'white'
+    color: 'white',
+    border: "none",
+    '&:hover': {
+      color: '#0b8dc9',
+      border: "none"
+    }
   }
 };
 
@@ -50,11 +57,21 @@ class Profile extends Component {
   constructor(props) {
     super(props);
 
+    this.handleFollow = this.handleFollow.bind(this);
+    this.handleUnfollow = this.handleUnfollow.bind(this);
   }
 
   componentDidMount() {
     this.props.getPostsByUserId(this.props.match.params.userId);
     this.props.getUserProfile(this.props.match.params.userId);
+  }
+
+  handleFollow() {
+    this.props.followUser(this.props.match.params.userId);
+  }
+
+  handleUnfollow() {
+    this.props.unfollowUser(this.props.match.params.userId);
   }
 
   render() {
@@ -68,18 +85,28 @@ class Profile extends Component {
           } = this.props;
     let followBtns;
     if (auth.isAuthenticated) {
-      followBtns = (<div className={classes.btnBlock}>
-        <Button variant="outlined" className={classes.btnFollow}>
-          Follow
-        </Button>
-      </div>)
-    } else {
-      followBtns = (<div>
-        <Button variant="outlined" className={classes.btnUnFollow}>
-          Unfollow
-        </Button>
-      </div>)
-    }
+      if (user.following.indexOf(this.props.match.params.userId) === -1) {
+        followBtns = (<div className={classes.btnBlock}>
+          <Button 
+            variant="outlined" 
+            className={classes.btnFollow} 
+            onClick={this.handleFollow}
+          >
+            Follow
+          </Button>
+        </div>)
+      } else {
+        followBtns = (<div className={classes.btnBlock}>
+          <Button 
+            variant="outlined" 
+            className={classes.btnFollow} 
+            onClick={this.handleUnfollow}
+          >
+            Unfollow
+          </Button>
+        </div>)
+      }
+    } 
     let items;
     items = list && list.map(e => <Post key={e._id} post={e} />);
 
@@ -126,4 +153,9 @@ const mapStateToProps = state => ({
   user: state.auth.user
 })
 
-export default connect(mapStateToProps, { getPostsByUserId, getUserProfile })(withStyles(styles)(Profile));
+export default connect(mapStateToProps, { 
+  getPostsByUserId, 
+  getUserProfile, 
+  followUser, 
+  unfollowUser 
+})(withStyles(styles)(Profile));
