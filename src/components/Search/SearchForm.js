@@ -47,6 +47,22 @@ const styles = theme => ({
 });
 
 class SearchForm extends Component {
+  constructor(props) {
+    super(props);
+
+    this.handleKeyPress = this.handleKeyPress.bind(this);
+  }
+
+  handleKeyPress(e) {
+    const searchData = {
+      text: e.target.value
+    }
+
+    if (e.key === 'Enter') {
+      console.log(searchData);
+    }
+  }
+
   render() {
     const { classes } = this.props;
     return (
@@ -55,11 +71,12 @@ class SearchForm extends Component {
           <SearchIcon />
         </div>
         <InputBase 
-          placeholder="Search..."
+          placeholder="type and enter..."
           classes={{
             root: classes.inputRoot,
             input: classes.inputInput,
           }}
+          onKeyPress={this.handleKeyPress}
         />
       </div>
     )
