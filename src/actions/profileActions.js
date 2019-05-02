@@ -60,7 +60,7 @@ export const searchUser = (searchData, history) => dispatch => {
     .then(res => {
       history.push(`/profile/${res.data.userId}`)
     })
-    .catch(err => console.error(err));
+    .catch(err => history.push('/search'));
 };
 
 export const loadProfile = () => {
