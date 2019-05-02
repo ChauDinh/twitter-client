@@ -3,6 +3,10 @@ import { withStyles } from "@material-ui/core/styles";
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
 import { fade } from "@material-ui/core/styles/colorManipulator";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
+
+import { searchUser } from "../../actions/profileActions";
 
 const styles = theme => ({
   search: {
@@ -59,7 +63,7 @@ class SearchForm extends Component {
     }
 
     if (e.key === 'Enter') {
-      console.log(searchData);
+      this.props.searchUser(searchData, this.props.history);
     }
   }
 
@@ -83,4 +87,4 @@ class SearchForm extends Component {
   }
 }
 
-export default withStyles(styles)(SearchForm);
+export default connect(null, { searchUser })(withRouter(withStyles(styles)(SearchForm)));
