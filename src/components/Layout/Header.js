@@ -134,7 +134,7 @@ class Header extends Component {
     )
     return (
       <div className={classes.root}>
-        <AppBar position="static" style={{ backgroundColor: "#b4c2dd" }}>
+        <AppBar position="static" style={{ backgroundColor: "#94c7f3" }}>
           <Toolbar className={classes.space}>
             <Link to="/" className={classes.logo}>
               TwitBook

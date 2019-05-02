@@ -22,7 +22,7 @@ const styles = theme => ({
   },
   searchIcon: {
     width: theme.spacing.unit * 9,
-    heigh: '100%',
+    height: '100%',
     position: 'absolute',
     pointerEvents: 'none',
     display: 'flex',
