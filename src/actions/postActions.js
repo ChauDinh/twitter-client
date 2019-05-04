@@ -21,6 +21,15 @@ export const getPosts = () => dispatch => {
     .catch(err => console.error(err));
 };
 
+export const getPostsByFollowingUsers = () => dispatch => {
+  axios.get("http://localhost:8080/api/posts/following")
+    .then(res => dispatch({
+      type: GET_POSTS,
+      payload: res.data
+    }))
+    .catch(err => console.error(err));
+};
+
 export const loadPosts = () => {
   return {
     type: LOADING_POSTS
